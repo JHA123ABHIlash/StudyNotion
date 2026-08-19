@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Test</title>
+</head>
+<body>
+
+    <button id="payBtn">Pay ₹1499</button>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+
+        const TOKEN =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNTRhZDczYTg4OGE5MjEyMzM0ZTA2MCIsIm5hbWUiOiJDaGFuZGEiLCJlbWFpbCI6ImNoYW5kYTg0NzIyOEBnbWFpbC5jb20iLCJhY2NvdW50VHlwZSI6IlN0dWRlbnQiLCJpYXQiOjE3ODM5MzQ0NjgsImV4cCI6MTc4NjUyNjQ2OH0.uw87NlizLuSy_sBGqYyzhFdpQAk7Jm6VyUXVV8GCHi0";
+
+        const COURSE_ID = "6a52787e5a79934173f103c5";
+
+        document.getElementById("payBtn").onclick = async () => {
+
+            const response = await fetch(
+                "http://localhost:4000/api/v1/payment/capture-payment",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${TOKEN}`,
+                    },
+                    body: JSON.stringify({
+                        courseId: COURSE_ID,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            console.log(data);
+
+            if (!data.success) {
+                alert(data.message);
+                return;
+            }
+
+            const options = {
+
+                key: "rzp_test_TAG4lcsMU7fKIb",
+
+                amount: data.paymentResponse.amount,
+
+                currency: "INR",
+
+                name: "StudyNation",
+
+                description: "Course Payment",
+
+                order_id: data.paymentResponse.id,
+
+                handler: async function (response) {
+
+                    console.log(response);
+
+                    const verify = await fetch(
+                        "http://localhost:4000/api/v1/payment/verify-signature",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${TOKEN}`,
+                            },
+
+                            body: JSON.stringify({
+
+                                razorpay_order_id:
+                                    response.razorpay_order_id,
+
+                                razorpay_payment_id:
+                                    response.razorpay_payment_id,
+
+                                razorpay_signature:
+                                    response.razorpay_signature,
+
+                                courseId: COURSE_ID,
+                            }),
+                        }
+                    );
+
+                    const verifyData = await verify.json();
+
+                    console.log(verifyData);
+
+                    alert(verifyData.message);
+                },
+            };
+
+            const paymentObject = new Razorpay(options);
+
+            paymentObject.open();
+        };
+    </script>
+
+</body>
+</html>

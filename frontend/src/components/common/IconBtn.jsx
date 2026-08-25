@@ -5,7 +5,7 @@ export default function IconBtn({
     disabled,
     outline = false,
     customClasses,
-    type,
+    type = "button",
   }) {
     return (
       <button

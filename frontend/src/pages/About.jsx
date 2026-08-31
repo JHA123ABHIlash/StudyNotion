@@ -1,22 +1,3 @@
-// import React from "react";
-
-// export default function About() {
-//   return (
-//     <div className="mx-auto max-w-7xl px-6 py-16">
-
-//       <h1 className="text-4xl font-bold text-richblack-5">
-//         About StudyNation
-//       </h1>
-
-//       <p className="mt-6 text-lg leading-8 text-richblack-300">
-//         StudyNation is an online learning platform designed to help
-//         students learn industry-ready skills through high quality
-//         courses created by experienced instructors.
-//       </p>
-
-//     </div>
-//   );
-// }
 
 
 import React from "react"

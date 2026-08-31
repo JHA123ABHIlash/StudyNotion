@@ -7,13 +7,17 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error?.response?.status === 401) {
-            // Token expire ho gaya ya invalid hai
-            localStorage.removeItem("token");
-            localStorage.removeItem("user"); // agar user data bhi localStorage mein rakhte ho
-
-            // Redux state clear karne ke liye event dispatch kar sakte ho,
-            // lekin sabse simple tarika: seedha login page pe redirect kar do
-            window.location.href = "/login";
+            // Sirf tab redirect karo jab user PEHLE se logged in tha
+            // (matlab token already localStorage mein tha) - iska matlab
+            // session/token expire hua hai. Agar token hi nahi tha (jaise
+            // login/signup attempt fail hua galat password ki wajah se),
+            // to ye ek normal auth error hai, redirect nahi karna
+            const existingToken = localStorage.getItem("token");
+            if (existingToken) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/login";
+            }
         }
         return Promise.reject(error);
     }

@@ -53,25 +53,25 @@ export default function RequirementsField({
           className="form-style w-full"
         />
         <button
-          type="button"
-          onClick={handleAddRequirement}
-          className="font-semibold text-yellow-50"
-        >
-          Add
-        </button>
+  type="button"
+  onClick={handleAddRequirement}
+  className="rounded-md bg-yellow-50 px-4 py-2 text-sm font-semibold text-richblack-900 hover:bg-yellow-100"
+>
+  Add
+</button>
       </div>
       {requirementsList.length > 0 && (
         <ul className="mt-2 list-inside list-disc">
           {requirementsList.map((requirement, index) => (
             <li key={index} className="flex items-center text-richblack-5">
               <span>{requirement}</span>
-              <button
-                type="button"
-                className="ml-2 text-xs text-pure-greys-300 "
-                onClick={() => handleRemoveRequirement(index)}
-              >
-                clear
-              </button>
+             <button
+  type="button"
+  className="ml-2 rounded-md border border-richblack-500 px-2 py-[2px] text-xs text-pink-200 hover:bg-pink-200 hover:text-richblack-900"
+  onClick={() => handleRemoveRequirement(index)}
+>
+  clear
+</button>
             </li>
           ))}
         </ul>

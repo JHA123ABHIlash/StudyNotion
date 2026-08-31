@@ -69,7 +69,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
         <div class="container">
 
              <a href="${process.env.FRONTEND_URL}"><img class="logo"
-            src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
+            src="https://res.cloudinary.com/dkbupsgot/image/upload/v1788157963/rzp_logo.png" alt="StudyNotion Logo"></a>
             <div class="message">Course Registration Confirmation</div>
             <div class="body">
                 <p>Dear ${name},</p>
@@ -80,7 +80,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
                 <a class="cta" href="${process.env.FRONTEND_URL}/dashboard">Go to Dashboard</a>
             </div>
             <div class="support">If you have any questions or need assistance, please feel free to reach out to us at 
-                    href="mailto:info@studynotion.com">info@studynotion.com</a>. We are here to help!</div>
+                    href="mailto:infostudynotion0@gmail.com">infostudynotion0@gmail.com</a>. We are here to help!</div>
         </div>
     </body>
     

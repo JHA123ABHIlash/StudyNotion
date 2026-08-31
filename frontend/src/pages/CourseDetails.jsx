@@ -1,123 +1,8 @@
-// import { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import CourseReviews from "../components/Course/CourseReviews";
-// import { getCourseDetails } from "../services/operations/courseAPI";
-// import AddReviewModal from "../components/Course/AddReviewModal";
-
-
-// import BuyCourseCard from "../components/Course/BuyCourseCard";
-// import CourseHero from "../components/Course/CourseHero";
-// import CourseContent from "../components/Course/CourseContent";
-// import CourseInformation from "../components/Course/CourseInformation";
-// import InstructorDetails from "../components/Course/InstructorDetails";
-
-
-
-// export default function CourseDetails() {
-//   const { courseId } = useParams();
-//   const token = useSelector((state) => state.auth.token);
-
-//   const [loading, setLoading] = useState(true);
-//   const [course, setCourse] = useState(null);
-//   const [showReviewModal, setShowReviewModal] = useState(false);
-
-//   const user = useSelector((state) => state.auth.user);
-  
-
-//   async function fetchCourse() {
-//     setLoading(true);
-
-//     const result = await getCourseDetails(courseId, token);
-
-//     if (result) {
-//       setCourse(result);
-//     }
-
-//     setLoading(false);
-//   }
-
- 
-
-
-//   useEffect(() => {
-//     fetchCourse();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center bg-richblack-900">
-//         <h2 className="text-2xl font-semibold text-richblack-5">Loading...</h2>
-//       </div>
-//     );
-//   }
-
-//   if (!course) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center bg-richblack-900">
-//         <h2 className="text-2xl font-semibold text-red-400">
-//           Course Not Found
-//         </h2>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="min-h-screen bg-richblack-900 text-richblack-5">
-//       {/* Hero Section */}
-
-//       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 py-10 lg:flex-row">
-//         {/* Left */}
-
-//         <div className="flex-1">
-//           <CourseHero course={course} />
-        
-//           <CourseInformation course={course} />
-
-//           <CourseContent course={course} />
-
-//           <InstructorDetails instructor={course.instructor}/>
-
-//           {/* Ratings & Reviews */}
-//           <CourseReviews courseId={course._id} />
-
-//           {course.studentsEnrolled?.some(
-//             (student) => student._id === user?._id,
-//           ) && (
-//             <div className="mt-8">
-//               <button
-//                 onClick={() => setShowReviewModal(true)}
-//                 className="rounded-md bg-yellow-50 px-6 py-3 font-semibold text-richblack-900"
-//               >
-//                 Write Review
-//               </button>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Right Card */}
-
-//         <BuyCourseCard course={course} />
-
-//       </div>
-
-//       {showReviewModal && (
-//         <AddReviewModal
-//           courseId={course._id}
-//           onClose={() => setShowReviewModal(false)}
-//           onSuccess={fetchCourse}
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-
-
 import React, { useEffect, useState } from "react"
 import { BiInfoCircle } from "react-icons/bi"
 import { HiOutlineGlobeAlt } from "react-icons/hi"
 import ReactMarkdown from "react-markdown";
+import { toast } from "react-hot-toast"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 
@@ -129,6 +14,8 @@ import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import { formatDate } from "../services/formatDate"
 import { fetchCourseDetails } from "../services/operations/courseDetailsAPI"
 import { buyCourse } from "../services/operations/studentFeaturesAPI"
+import { addToCart } from "../slices/cartSlice"
+import { ACCOUNT_TYPE } from "../utils/constants"
 import GetAvgRating from "../utils/avgRating"
 import Error from "./Error"
 
@@ -232,6 +119,25 @@ function CourseDetails() {
     })
   }
 
+  const handleAddToCart = () => {
+    if (user && user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
+      toast.error("You are an Instructor. You can't buy a course.")
+      return
+    }
+    if (token) {
+      dispatch(addToCart(response?.data?.courseDetails))
+      return
+    }
+    setConfirmationModal({
+      text1: "You are not logged in!",
+      text2: "Please login to add To Cart",
+      btn1Text: "Login",
+      btn2Text: "Cancel",
+      btn1Handler: () => navigate("/login"),
+      btn2Handler: () => setConfirmationModal(null),
+    })
+  }
+
   if (paymentLoading) {
     // console.log("payment loading")
     return (
@@ -290,10 +196,23 @@ function CourseDetails() {
               <p className="space-x-3 pb-4 text-3xl font-semibold text-richblack-5">
                 Rs. {price}
               </p>
-              <button className="yellowButton" onClick={handleBuyCourse}>
-                Buy Now
+              <button
+                className="yellowButton"
+                onClick={
+                  user && studentsEnrolled.includes(user?._id)
+                    ? () => navigate("/dashboard/enrolled-courses")
+                    : handleBuyCourse
+                }
+              >
+                {user && studentsEnrolled.includes(user?._id)
+                  ? "Go To Course"
+                  : "Buy Now"}
               </button>
-              <button className="blackButton">Add to Cart</button>
+              {(!user || !studentsEnrolled.includes(user?._id)) && (
+                <button className="blackButton" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
+              )}
             </div>
           </div>
           {/* Courses Card */}

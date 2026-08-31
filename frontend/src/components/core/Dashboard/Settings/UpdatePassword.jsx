@@ -24,7 +24,7 @@ export default function UpdatePassword() {
   const submitPasswordForm = async (data) => {
     // console.log("password Data - ", data)
     try {
-      await changePassword(token, data);
+      await changePassword(token, data, navigate);
     } catch (error) {
       console.log("ERROR MESSAGE - ", error.message);
     }
@@ -129,6 +129,7 @@ export default function UpdatePassword() {
         </div>
         <div className="flex justify-end gap-2">
           <button
+            type="button"
             onClick={() => {
               navigate("/dashboard/my-profile");
             }}

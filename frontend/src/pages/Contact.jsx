@@ -1,28 +1,3 @@
-// import React from "react";
-
-// export default function Contact() {
-//   return (
-//     <div className="mx-auto max-w-7xl px-6 py-16">
-
-//       <h1 className="text-4xl font-bold text-richblack-5">
-//         Contact Us
-//       </h1>
-
-//       <p className="mt-5 text-richblack-300">
-//         Email : support@studynation.com
-//       </p>
-
-//       <p className="mt-2 text-richblack-300">
-//         Phone : +91 9876543210
-//       </p>
-
-//       <p className="mt-2 text-richblack-300">
-//         Address : India
-//       </p>
-
-//     </div>
-//   );
-// }
 
 
 import React from "react"

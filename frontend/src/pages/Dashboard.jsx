@@ -1,20 +1,4 @@
-// import React from "react";
-// import { Outlet } from "react-router-dom";
-// import DashboardSidebar from "../components/Dashboard/DashboardSidebar";
 
-// export default function Dashboard() {
-//   return (
-//     <div className="flex min-h-screen bg-richblack-900">
-
-//       <DashboardSidebar />
-
-//       <div className="flex-1 p-8">
-//         <Outlet />
-//       </div>
-
-//     </div>
-//   );
-// }
 
 import { useSelector } from "react-redux"
 import { Outlet } from "react-router-dom"

@@ -1,21 +1,3 @@
-// import Footer from './components/Footer';
-// import Navbar from './components/Navbar';
-// import AppRoutes from './routes/AppRoutes';
-
-// export default function App() {
-//   return (
-//     <div>
-//       <Navbar/>
-      
-//       <AppRoutes/>
-
-//       <Footer/>
-//     </div>
-//   )
-// }
-
-
-// import "./App.css";
 import {Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home"
 import Navbar from "./components/common/Navbar"

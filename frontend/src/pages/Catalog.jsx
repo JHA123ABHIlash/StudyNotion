@@ -1,132 +1,10 @@
-// import { useEffect, useState } from "react";
-// import {getAllTags,getCategoryPageDetails,} from "../services/operations/tagAPI";
-// import { useNavigate } from "react-router-dom";
-
-// export default function Catalog() {
-//   const [loading, setLoading] = useState(true);
-//   const [tags, setTags] = useState([]);
-//   const [selectedCategory, setSelectedCategory] = useState(null);
-//   const [courses, setCourses] = useState([]);
-
-//   const navigate = useNavigate();
-
-//   async function fetchTags() {
-//   setLoading(true);
-
-//   const result = await getAllTags();
-
-//   if (result) {
-//     setTags(result);
-
-//     if (result.length > 0) {
-//       handleCategory(result[0]._id);
-//     }
-//   }
-
-//   setLoading(false);
-// }
-
-//   async function handleCategory(categoryId) {
-//   setSelectedCategory(categoryId);
-
-//   const result = await getCategoryPageDetails(categoryId);
-
-//   if (result) {
-//     setCourses(result.courses);
-//   }
-// }
-
-//   useEffect(() => {
-//     fetchTags();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center">
-//         <h2>Loading...</h2>
-//       </div>
-//     );
-//   }
-
-//   return (
-//   <div className="mx-auto max-w-7xl p-8">
-//     <h1 className="mb-10 text-4xl font-bold">
-//       Explore Categories
-//     </h1>
-
-//     {/* Categories */}
-//     <div className="grid grid-cols-3 gap-6">
-//       {tags.map((tag) => (
-//         <div
-//           key={tag._id}
-//           onClick={() => handleCategory(tag._id)}
-//           className={`cursor-pointer rounded-lg border p-6 shadow ${
-//             selectedCategory === tag._id
-//               ? "border-yellow-50"
-//               : "border-richblack-700"
-//           }`}
-//         >
-//           <h2 className="text-2xl font-semibold">
-//             {tag.name}
-//           </h2>
-
-//           <p className="mt-3 text-richblack-300">
-//             {tag.description}
-//           </p>
-//         </div>
-//       ))}
-//     </div>
-
-//     {/* Courses */}
-//     <div className="mt-12">
-//       <h2 className="mb-6 text-3xl font-bold">
-//         Courses
-//       </h2>
-
-//       {courses.length === 0 ? (
-//         <p>No Courses Found</p>
-//       ) : (
-//         <div className="grid grid-cols-3 gap-6">
-//           {courses.map((course) => (
-//             <div
-//   key={course._id}
-//   onClick={() => navigate(`/course/${course._id}`)}
-//   className="cursor-pointer rounded-lg border p-5 transition hover:scale-105"
-// >
-//               <img
-//                 src={course.thumbnail}
-//                 alt={course.courseName}
-//                 className="h-44 w-full rounded object-cover"
-//               />
-
-//               <h3 className="mt-4 text-xl font-semibold">
-//                 {course.courseName}
-//               </h3>
-
-//               <p className="mt-2">
-//                 ₹ {course.price}
-//               </p>
-
-//               <p className="mt-2 text-sm">
-//                 {course.instructor.firstName}{" "}
-//                 {course.instructor.lastName}
-//               </p>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   </div>
-// );
-// }
-
-
 import React, { useEffect, useState } from 'react'
 import Footer from '../components/common/Footer'
 import { useParams } from 'react-router-dom'
 import { apiConnector } from '../services/apiconnector';
 import { categories } from '../services/apis';
 import { getCatalogaPageData } from '../services/operations/pageAndComponentData';
+import { slugify } from '../utils/slugify';
 import Course_Card from '../components/core/Catalog/Course_Card';
 import CourseSlider from '../components/core/Catalog/CourseSlider';
 import { useSelector } from "react-redux"
@@ -139,14 +17,20 @@ const Catalog = () => {
   const [active, setActive] = useState(1)
     const [catalogPageData, setCatalogPageData] = useState(null);
     const [categoryId, setCategoryId] = useState("");
+    const [categoryNotFound, setCategoryNotFound] = useState(false);
 
     //Fetch all categories
     useEffect(()=> {
         const getCategories = async() => {
             const res = await apiConnector("GET", categories.CATEGORIES_API);
-            const category_id = 
-            res?.data?.data?.filter((ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName)[0]._id;
-            setCategoryId(category_id);
+            const matchedCategories =
+              res?.data?.data?.filter((ct) => slugify(ct.name) === catalogName) || [];
+
+            if (matchedCategories.length > 0) {
+                setCategoryId(matchedCategories[0]._id);
+            } else {
+                setCategoryNotFound(true);
+            }
         }
         getCategories();
     },[catalogName]);
@@ -168,6 +52,10 @@ const Catalog = () => {
         
     },[categoryId]);
 
+
+    if (categoryNotFound) {
+        return <Error />
+    }
 
     if (loading || !catalogPageData) {
         return (

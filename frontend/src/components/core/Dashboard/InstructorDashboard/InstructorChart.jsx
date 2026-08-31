@@ -52,22 +52,32 @@ const InstructorChart = ({courses}) => {
 
 
   return (
-    <div>
-      <p>Visualise</p>
-      <div className='flex gap-x-5'>
+    <div className='flex flex-1 flex-col rounded-md bg-richblack-800 p-6'>
+      <p className='text-lg font-bold text-richblack-5'>Visualise</p>
+      <div className='mt-4 flex gap-x-5'>
         <button
         onClick={() => setCurrChart("students")}
+        className={`rounded-sm p-1 px-3 text-sm transition-all duration-200 ${
+            currChart === "students"
+            ? "bg-richblack-700 text-yellow-50"
+            : "text-yellow-400"
+        }`}
         >
-            Student
+            Students
         </button>
 
         <button
         onClick={() => setCurrChart("income")}
+        className={`rounded-sm p-1 px-3 text-sm transition-all duration-200 ${
+            currChart === "income"
+            ? "bg-richblack-700 text-yellow-50"
+            : "text-yellow-400"
+        }`}
         >
             Income
         </button>
       </div>
-      <div>
+      <div className='relative my-6 mx-auto aspect-square h-full w-full max-w-[300px]'>
         <Pie 
             data={currChart === "students" ? chartDataForStudents : chartDataForIncome}
             options={options}

@@ -66,7 +66,8 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
       
       <body>
           <div class="container">
-              <a href="${process.env.FRONTEND_URL}"><img class="logo" src="https://i.ibb.co/7Xyj3PC/logo.png"
+              <a href="${process.env.FRONTEND_URL}"><img class="logo"
+               src="https://res.cloudinary.com/dkbupsgot/image/upload/v1788157963/rzp_logo.png"
         alt="StudyNotion Logo"></a>
               <div class="message">Course Payment Confirmation</div>
               <div class="body">
@@ -76,7 +77,7 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
                   <p>Your Order ID is <b>${orderId}</b></p>
               </div>
               <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                      href="mailto:info@studynotion.com">info@studynotion.com</a>. We are here to help!</div>
+                      href="mailto:infostudynotion0@gmail.com">infostudynotion0@gmail.com</a>. We are here to help!</div>
           </div>
       </body>
       

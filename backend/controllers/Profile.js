@@ -181,13 +181,13 @@ exports.getEnrolledCourses = async (req, res) => {
 		for (var j = 0; j < userDetails.courses[i].courseContent.length; j++) {
 		  totalDurationInSeconds += userDetails.courses[i].courseContent[
 			j
-		  ].subSection.reduce((acc, curr) => acc + parseInt(curr.timeDuration), 0)
-		  userDetails.courses[i].totalDuration = convertSecondsToDuration(
-			totalDurationInSeconds
-		  )
+		  ].subSection.reduce((acc, curr) => acc + (parseInt(curr.timeDuration) || 0), 0)
 		  SubsectionLength +=
 			userDetails.courses[i].courseContent[j].subSection.length
 		}
+		userDetails.courses[i].totalDuration = convertSecondsToDuration(
+		  totalDurationInSeconds
+		)
 		let courseProgressCount = await CourseProgress.findOne({
 		  courseID: userDetails.courses[i]._id,
 		  userId: userId,

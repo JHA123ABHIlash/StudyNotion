@@ -328,7 +328,7 @@ exports.getCourseDetails = async (req, res) => {
     let totalDurationInSeconds = 0
     courseDetails.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        const timeDurationInSeconds = parseInt(subSection.timeDuration) || 0
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
@@ -396,7 +396,7 @@ exports.getFullCourseDetails = async (req, res) => {
     let totalDurationInSeconds = 0
     courseDetails.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+        const timeDurationInSeconds = parseInt(subSection.timeDuration) || 0
         totalDurationInSeconds += timeDurationInSeconds
       })
     })

@@ -1,74 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import OtpInput from "react-otp-input";
-// import { useSelector, useDispatch } from "react-redux";
-// import { sendOtp, signup } from "../services/operations/authAPI";
-// import { useNavigate, Navigate } from "react-router-dom";
-
-// export default function VerifyEmail() {
-//   const [otp, setOtp] = useState("");
-//   const [timer, setTimer] = useState(60);
-
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-
-//   const { signupData } = useSelector((state) => state.auth);
-
-//   if (!signupData) {
-//     return <Navigate to="/signup" />;
-//   }
-
-//   useEffect(() => {
-//     if (timer <= 0) return;
-
-//     const interval = setInterval(() => {
-//       setTimer((prev) => prev - 1);
-//     }, 1000);
-
-//     return () => clearInterval(interval);
-//   }, [timer > 0]);
-
-//   function submitHandler(e) {
-//     e.preventDefault();
-
-//     dispatch(signup(signupData, otp, navigate));
-//   }
-
-//   return (
-//     <div>
-//       <h3>Verify Email</h3>
-
-//       <p>A verification code has been sent to your email.</p>
-//       <form onSubmit={submitHandler}>
-//         <OtpInput
-//           value={otp}
-//           onChange={setOtp}
-//           numInputs={6}
-//           renderSeparator={<span>-</span>}
-//           renderInput={(props) => <input {...props} />}
-//         />
-
-//         <button type="submit">Verify OTP</button>
-//         {timer > 0 ? (
-//           <p>Resend OTP in {timer}s</p>
-//         ) : (
-//           <p>You can resend OTP now.</p>
-//         )}
-//         <button
-//           type="button"
-//           disabled={timer > 0}
-//           onClick={() => {
-//             dispatch(sendOtp(signupData.email, navigate));
-//             setTimer(60);
-//           }}
-//         >
-//           Resend OTP
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-
 import { useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 import { Link } from "react-router-dom";
@@ -166,7 +95,7 @@ function VerifyEmail() {
             </Link>
             <button
               className="flex items-center text-blue-100 gap-x-2"
-              onClick={() => dispatch(sendOtp(signupData.email))}
+              onClick={() => dispatch(sendOtp(signupData.email, navigate))}
             >
               <RxCountdownTimer />
               Resend it

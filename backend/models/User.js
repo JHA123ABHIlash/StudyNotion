@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema(
 		password: {
 			type: String,
 			required: true,
+			select: false,
 		},
 		// Define the role field with type String and enum values of "Admin", "Student", or "Visitor"
 		accountType: {
